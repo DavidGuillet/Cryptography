@@ -75,6 +75,9 @@ scripts\run_tests.bat
 
 Or manually: `pytest tests/ -v` (with env activated).
 
+- **test_password_generator.py**: Core library tests (Passveurd, CryptoPass, OUTPUT_TYPE)
+- **test_app.py**: App tests (AppTest load, generation logic, storage roundtrip). Skip the UI test with `pytest -m "not streamlit"` if needed.
+
 ## Library Usage
 
 ```python

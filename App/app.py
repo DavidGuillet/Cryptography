@@ -142,9 +142,9 @@ def _render_saved_passwords(tab_name, on_load, on_delete, key_prefix):
             key=f"{key_prefix}_entry_key",
         )
         col_load, col_delete = st.columns(2)
-        if col_load.button("Load Selected", use_container_width=True):
+        if col_load.button("Load Selected", use_container_width=True, key=f"{key_prefix}_load_btn"):
             on_load(entry_key)
-        if col_delete.button("Delete Selected", use_container_width=True):
+        if col_delete.button("Delete Selected", use_container_width=True, key=f"{key_prefix}_delete_btn"):
             on_delete(entry_key)
 
 
@@ -172,16 +172,16 @@ def main():
             st.text_input("File Name", key="file_name")
             st.selectbox("Format", ["json", "yaml"], key="file_format")
             col_load, col_save = st.columns(2)
-            if col_load.button("Load", use_container_width=True):
+            if col_load.button("Load", use_container_width=True, key="sidebar_load"):
                 _load_config_from_file()
-            if col_save.button("Save", use_container_width=True):
+            if col_save.button("Save", use_container_width=True, key="sidebar_save"):
                 _save_config_to_file()
             uploaded = st.file_uploader(
                 "Import from file",
                 type=["json", "yaml"],
                 key="config_upload",
             )
-            if st.button("Import Upload", use_container_width=True):
+            if st.button("Import Upload", use_container_width=True, key="sidebar_import"):
                 if uploaded is None:
                     st.warning("Select a file to import.")
                 else:
@@ -206,10 +206,11 @@ def main():
                     data=export_text,
                     file_name=f"{st.session_state.file_name}.{st.session_state.file_format}",
                     use_container_width=True,
+                    key="sidebar_export",
                 )
             except Exception as exc:
                 st.error(str(exc))
-            if st.button("Clear Saved Config", use_container_width=True):
+            if st.button("Clear Saved Config", use_container_width=True, key="sidebar_clear"):
                 st.session_state.password_config = dict(app_config["default_config"])
                 save_config_to_cookie(
                     cookie_manager, app_config["cookie_key"], st.session_state.password_config
@@ -273,7 +274,7 @@ def main():
                 key="pv_dk_len",
             )
 
-        if st.button("Generate", use_container_width=True):
+        if st.button("Generate", use_container_width=True, key="pv_generate"):
             if st.session_state.pv_extended_mode:
                 character_types = [
                     CHARACTER_TYPE[name] for name in st.session_state.pv_char_types
@@ -315,7 +316,7 @@ def main():
                 )
                 _update_config(pass_generator, cookie_manager, app_config["cookie_key"])
 
-        st.text_area("Generated Password", value=st.session_state.pv_result, height=70)
+        st.text_area("Generated Password", value=st.session_state.pv_result, height=70, key="pv_result", disabled=True)
 
     with tab_pin:
         st.text_input("Secret", type="password", key="pin_secret")
@@ -348,7 +349,7 @@ def main():
                 key="pin_dk_len",
             )
 
-        if st.button("Generate PIN Config & Copy to Passveurd", use_container_width=True):
+        if st.button("Generate PIN Config & Copy to Passveurd", use_container_width=True, key="pin_generate"):
             pass_generator = Passveurd(
                 st.session_state.pin_service,
                 st.session_state.pin_target_pin,
@@ -380,7 +381,7 @@ def main():
             st.session_state.pv_secret = st.session_state.pin_secret
             _update_config(new_passveurd, cookie_manager, app_config["cookie_key"])
 
-        st.text_area("Generated PIN", value=st.session_state.pin_result, height=70)
+        st.text_area("Generated PIN", value=st.session_state.pin_result, height=70, key="pin_result", disabled=True)
 
     with tab_crypto:
         _render_saved_passwords(
@@ -401,7 +402,7 @@ def main():
         st.text_input("Category", key="cp_category")
         st.text_area("Note", key="cp_note")
 
-        if st.button("Generate", use_container_width=True):
+        if st.button("Generate", use_container_width=True, key="cp_generate"):
             pass_generator = CryptoPass(
                 st.session_state.cp_user,
                 st.session_state.cp_url,
@@ -413,7 +414,7 @@ def main():
             )
             _update_config(pass_generator, cookie_manager, app_config["cookie_key"])
 
-        st.text_area("Generated Password", value=st.session_state.cp_result, height=70)
+        st.text_area("Generated Password", value=st.session_state.cp_result, height=70, key="cp_result", disabled=True)
 
 
 def _update_config(pass_generator, cookie_manager, cookie_key):
