@@ -13,7 +13,10 @@ Cryptography/
 │   ├── passveurd_app_storage.py
 │   └── passveurd_app_config.yaml
 ├── scripts/                # Scripts and dependency definitions
-│   └── requirements.yaml
+│   ├── requirements.yaml
+│   ├── create_env.bat      # Create local env + Jupyter kernel (requires PYTHON_PATH)
+│   ├── run_app.bat
+│   └── run_tests.bat
 ├── tests/                  # Unit tests
 │   ├── __init__.py
 │   └── test_password_generator.py
@@ -30,36 +33,47 @@ Cryptography/
 
 ## Installation
 
-### Option 1: Conda (recommended)
+### Option 1: Batch scripts (Windows, conda)
 
-```bash
-conda env create -f scripts/requirements.yaml
-conda activate cryptography-scripts
+Set `PYTHON_PATH` to your conda install folder (e.g. `C:\ProgramData\anaconda3`).
+
+```batch
+scripts\create_env.bat
 ```
 
-### Option 2: pip
+This creates a local environment in `Cryptography\env\` and registers a Jupyter kernel "Python (Cryptography)" in one step.
+
+### Option 2: Conda manually
 
 ```bash
-pip install streamlit pyyaml extra-streamlit-components
+conda env create -f scripts/requirements.yaml --prefix ./env
+conda activate ./env
+python -m ipykernel install --user --name cryptography-scripts --display-name "Python (Cryptography)"
+```
+
+### Option 3: pip
+
+```bash
+pip install streamlit pyyaml extra-streamlit-components pytest ipykernel
 ```
 
 ## Running the App
 
-From the project root:
-
-```bash
-streamlit run App/app.py
+```batch
+scripts\run_app.bat
 ```
+
+Or manually: `streamlit run App/app.py` (with env activated).
 
 The app opens in your browser with tabs for Passveurd, PIN Config, and CryptoPass.
 
 ## Running Tests
 
-From the project root:
-
-```bash
-pytest tests/ -v
+```batch
+scripts\run_tests.bat
 ```
+
+Or manually: `pytest tests/ -v` (with env activated).
 
 ## Library Usage
 

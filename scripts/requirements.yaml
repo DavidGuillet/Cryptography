@@ -1,6 +1,5 @@
 # Script and App dependencies
-# Create conda env: conda env create -f scripts/requirements.yaml
-# Activate: conda activate cryptography-scripts
+# Env is created locally at ./env via create_env.bat (uses --prefix)
 name: cryptography-scripts
 channels:
   - conda-forge
@@ -13,3 +12,4 @@ dependencies:
     - pyyaml
     - extra-streamlit-components
     - pytest
+    - ipykernel
