@@ -29,4 +29,4 @@ if %ERRORLEVEL% NEQ 0 (
 )
 
 echo Starting Streamlit app...
-streamlit run App/app.py
+streamlit run src/PasswordGenerator_Streamlit.py

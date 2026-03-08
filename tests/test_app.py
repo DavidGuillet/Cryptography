@@ -9,10 +9,10 @@ import sys
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-# Add project root and App for imports
+# Add project root and src/ for imports
 _project_root = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(_project_root))
-sys.path.insert(0, str(_project_root / "App"))
+sys.path.insert(0, str(_project_root / "src"))
 
 import pytest
 
@@ -33,10 +33,10 @@ def mock_cookie_manager():
 
 @STREAMLIT_APP_TEST
 def test_app_loads_without_error(mock_cookie_manager):
-    """App initializes and runs without raising."""
+    """App initialises and runs without raising."""
     from streamlit.testing.v1 import AppTest
 
-    app_path = Path(__file__).resolve().parent.parent / "App" / "app.py"
+    app_path = _project_root / "src" / "PasswordGenerator_Streamlit.py"
     at = AppTest.from_file(str(app_path))
     at.run()
 
@@ -55,13 +55,12 @@ def test_app_generation_logic_passveurd():
     """
     from src.PasswordGenerator import (
         Passveurd,
-        OUTPUT_TYPE,
-        CHARACTER_TYPE,
+        OutputType,
         PasswordMetaData,
     )
 
     # Simulate app state: extended mode off, ALPHANUMERICPLUS
-    output_type = OUTPUT_TYPE.ALPHANUMERICPLUS
+    output_type = OutputType.ALPHANUMERICPLUS
     pg = Passveurd(
         "example.com",
         1,
@@ -77,10 +76,10 @@ def test_app_generation_logic_passveurd():
 def test_app_generation_logic_passveurd_extended():
     """Verify extended mode generation logic used by the app."""
     from passveurd_app_storage import build_output_type
-    from src.PasswordGenerator import Passveurd, CHARACTER_TYPE, PasswordMetaData
+    from src.PasswordGenerator import Passveurd, CharacterType, PasswordMetaData
 
     # Simulate app state: extended mode, LOWER + UPPER + NUMERIC
-    char_types = [CHARACTER_TYPE.LOWER, CHARACTER_TYPE.UPPER, CHARACTER_TYPE.NUMERIC]
+    char_types = [CharacterType.LOWER, CharacterType.UPPER, CharacterType.NUMERIC]
     output_type = build_output_type(char_types)
     pg = Passveurd("example.com", 1, 12, output_type, metadata=PasswordMetaData())
     result = pg.generate_password("test_secret")
@@ -104,31 +103,26 @@ def test_app_generation_logic_cryptopass():
 def test_app_widgets_have_unique_keys():
     """Ensure all Streamlit widgets that can be duplicated have explicit key= parameters.
 
-    Streamlit auto-generates IDs from widget type + label. Multiple widgets with the same
-    type and label (e.g. text_area 'Generated Password' in multiple tabs) cause
-    StreamlitDuplicateElementId. This static check catches missing keys before runtime.
-
-    Why AppTest may not catch it: AppTest can use a different Streamlit version or
-    execution path than the live app; duplicate-ID enforcement may vary by version.
+    Streamlit auto-generates IDs from widget type + label.  Multiple widgets with
+    the same type and label (e.g. text_area 'Generated Password' in multiple tabs)
+    cause StreamlitDuplicateElementId.  This static check catches missing keys
+    before runtime.
     """
-    app_path = Path(__file__).resolve().parent.parent / "App" / "app.py"
+    import re
+
+    app_path = _project_root / "src" / "PasswordGenerator_Streamlit.py"
     source = app_path.read_text(encoding="utf-8")
 
     # Widgets that require unique keys when used multiple times
-    # Pattern: st.widget_name(...) - we need key= in the call
-    import re
-
     widget_patterns = [
         (r"st\.(text_area)\s*\(", "text_area"),
         (r"st\.(button)\s*\(", "button"),
         (r"st\.(download_button)\s*\(", "download_button"),
     ]
 
-    # Find all widget calls and their character positions
     for pattern, widget_type in widget_patterns:
         for match in re.finditer(pattern, source):
             start = match.end()
-            # Find the matching closing paren for this call (simplified: assume no nested parens in first 500 chars)
             depth = 1
             pos = start
             end = min(start + 800, len(source))
@@ -154,9 +148,9 @@ def test_app_storage_serialize_roundtrip():
         dump_config_to_text,
         _parse_config_text,
     )
-    from src.PasswordGenerator import Passveurd, CryptoPass, OUTPUT_TYPE, PasswordMetaData
+    from src.PasswordGenerator import Passveurd, CryptoPass, OutputType, PasswordMetaData
 
-    pw = Passveurd("x.com", 1, 10, OUTPUT_TYPE.ALPHANUMERICPLUS, metadata=PasswordMetaData())
+    pw = Passveurd("x.com", 1, 10, OutputType.ALPHANUMERICPLUS, metadata=PasswordMetaData())
     cp = CryptoPass("u", "url.com", 20, PasswordMetaData())
 
     config = {

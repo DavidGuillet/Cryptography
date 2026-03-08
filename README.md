@@ -8,8 +8,7 @@ Utilities and application to generate deterministic passwords from a secret. Sup
 Cryptography/
 ├── src/                    # Core password generation library
 │   └── PasswordGenerator.py
-├── App/                    # Streamlit application
-│   ├── app.py              # Main entry point
+│   ├── PasswordGenerator_Streamlit.py              # Main entry point
 │   ├── passveurd_app_storage.py
 │   └── passveurd_app_config.yaml
 ├── scripts/                # Scripts and dependency definitions
@@ -20,6 +19,7 @@ Cryptography/
 ├── tests/                  # Unit tests
 │   ├── __init__.py
 │   └── test_password_generator.py
+│   └── test_app.py
 └── README.md
 ```
 
@@ -63,7 +63,7 @@ pip install streamlit pyyaml extra-streamlit-components pytest ipykernel
 scripts\run_app.bat
 ```
 
-Or manually: `streamlit run App/app.py` (with env activated).
+Or manually: `streamlit run src/PasswordGenerator_Streamlit.py` (with env activated).
 
 The app opens in your browser with tabs for Passveurd, PIN Config, and CryptoPass.
 
