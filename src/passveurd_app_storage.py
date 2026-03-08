@@ -26,10 +26,7 @@ import json
 import os
 from typing import Any, Optional
 
-try:
-    import yaml
-except ImportError:
-    yaml = None  # type: ignore[assignment]
+import yaml
 
 from PasswordGenerator import OutputTypeExtended
 
@@ -232,8 +229,6 @@ def dump_config_to_text(config: dict, file_format: str) -> str:
     if file_format == "json":
         return json.dumps(config, indent=2)
     if file_format == "yaml":
-        if yaml is None:
-            raise RuntimeError("PyYAML is not installed.")
         return yaml.safe_dump(config, sort_keys=False)
     raise RuntimeError(f"Unsupported file format: {file_format!r}")
 
@@ -260,8 +255,6 @@ def _parse_config_text(text: str, file_format: str) -> dict:
     if file_format == "json":
         data = json.loads(text)
     elif file_format == "yaml":
-        if yaml is None:
-            raise RuntimeError("PyYAML is not installed.")
         data = yaml.safe_load(text)
     else:
         raise RuntimeError(f"Unsupported file format: {file_format!r}")
@@ -303,8 +296,6 @@ def load_app_config(config_path: str) -> dict:
     """
     if not os.path.exists(config_path):
         raise FileNotFoundError("App config yaml not found.")
-    if yaml is None:
-        raise RuntimeError("PyYAML is not installed.")
     with open(config_path, "r", encoding="utf-8") as handle:
         data = yaml.safe_load(handle) or {}
     default_config = data.get("default_config") or {"Passveurd": {}, "CryptoPass": {}}
