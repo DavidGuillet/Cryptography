@@ -1,0 +1,15 @@
+# Script and App dependencies
+# Env is created locally at ./env via create_env.bat (uses --prefix)
+name: cryptography-scripts
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python>=3.10
+  - pip
+  - pip:
+    - streamlit
+    - pyyaml
+    - extra-streamlit-components
+    - pytest
+    - ipykernel

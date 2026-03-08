@@ -1,0 +1,27 @@
+# Test fixtures and expected outputs for password generator regression tests
+# Update these values only when the algorithm intentionally changes
+
+passveurd:
+  domain: "google.com"
+  version: 1
+  pass_len: 100
+  secret: "test"
+  # Full 100-char output per OUTPUT_TYPE (deterministic reference)
+  expected_outputs:
+    NUMERIC: "1109627171022344303662637650124764838046367287441540596038435677003094199832859504496873841323341746"
+    ALPHANUMERIC: "SJWBaTcN11V0N9akDiSlYEygNqFtHgCno62TuK7Kt1yt7GYdqN1xCgm02ILJ2Bm34gxdqzF43Lw0yM3TdQFoDK6ljGoaznMibjWC"
+    ALPHANUMERICPLUS: "SJWBaTcN11V0N9=?akDiSlYEygNqF-tHgCno6!2TuK7-Kt1yt7GYdqN1x&Cgm-02ILJ?2_B@m34gxd=qzF43Lw0yM3TdQFoDK?6l"
+
+cryptopass:
+  user: "user"
+  url: "google.com"
+  pass_len: 25
+  secret: "test"
+  expected_output: "+kswwW8CdKN0r1CEjHt1O97Ig"
+
+pin_config:
+  domain: "google.com"
+  version: 1
+  pin_target: "1234"
+  secret: "test"
+  max_offset: 20000

@@ -1,0 +1,47 @@
+page_title: Passveurd Generator
+cookie_key: passveurd_password_config_v1
+default_config:
+  Passveurd: {}
+  CryptoPass: {}
+default_state:
+  password_config:
+    Passveurd: {}
+    CryptoPass: {}
+  pv_secret: ""
+  pv_service: ""
+  pv_version: 0
+  pv_length: 25
+  pv_extended_mode: true
+  pv_char_types:
+    - LOWER
+    - UPPER
+    - NUMERIC
+    - SPECIAL
+  pv_output_type: ALPHANUMERICPLUS
+  pv_offset: 0
+  pv_hash_algo: sha1
+  pv_iterations: 10000
+  pv_dk_len: 32
+  pv_category: ""
+  pv_note: ""
+  pv_result: ""
+  pin_secret: ""
+  pin_service: ""
+  pin_target_pin: 0
+  pin_max_offset: 100000
+  pin_hash_algo: sha1
+  pin_iterations: 10000
+  pin_dk_len: 32
+  pin_category: ""
+  pin_note: ""
+  pin_result: ""
+  cp_secret: ""
+  cp_user: ""
+  cp_url: ""
+  cp_length: 25
+  cp_category: ""
+  cp_note: ""
+  cp_result: ""
+  file_directory: ""
+  file_name: passveurd_config
+  file_format: json
